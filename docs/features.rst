@@ -40,5 +40,9 @@ If instead we introduce default_cmd to conf, it now renders::
     $ ./netapplet.py
     Running ./netapplet.py
 
+.. raw:: latex
+
+    \newpage
+
 
 .. _CLG: https://clg.readthedocs.org/en/latest

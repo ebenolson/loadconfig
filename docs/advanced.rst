@@ -137,3 +137,7 @@ subparsers.
 This simple program succinctly highlights very common needs in a program
 lifecycle (configuration, interface, documentation, deployment) and it can
 easily be used as a base for more complex ones.
+
+.. raw:: latex
+
+    \newpage

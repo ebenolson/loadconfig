@@ -160,6 +160,10 @@ Thanks!
 * Solomon Hykes, Jerome Petazzoni and Sam Alba for `Docker`_
 * The awesome Python, Linux and Git communities
 
+.. raw:: latex
+
+    \newpage
+
 
 .. _Guido van Rossum: http://en.wikipedia.org/wiki/Guido_van_Rossum
 .. _Linus Torvalds: http://en.wikipedia.org/wiki/Linus_Torvalds

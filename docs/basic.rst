@@ -144,3 +144,7 @@ As with regular code, the latest key defined wins:
 But what about the DRY (Don't Repeat Yourself) principle? And what about
 descriptive programming? Lets explore some of the best features like include
 and CLG (Command Line Generator) in the :ref:`intermediate tutorial`
+
+.. raw:: latex
+
+    \newpage

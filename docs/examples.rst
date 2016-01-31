@@ -151,6 +151,10 @@ Pretty much all functionality and examples from CLG work unmodified in
 loadconfig, including CLG execute keyword. There is plenty of `CLG`_ and
 `argparse`_ documentation to make the most of the cli.
 
+.. raw:: latex
+
+    \newpage
+
 
 .. _docker: https://www.docker.com
 .. _bash hackers: http://wiki.bash-hackers.org

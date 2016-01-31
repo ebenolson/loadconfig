@@ -373,3 +373,7 @@ Now that we have a good overview of the different pieces, lets put them
 together. We have built enough knowledge to fully understand our magical
 loadconfig program on the :ref:`examples <examples>` chapter.
 More advanced material can also be found in :ref:`advanced tutorial`.
+
+.. raw:: latex
+
+    \newpage
