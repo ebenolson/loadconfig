@@ -19,7 +19,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'documentation'
-copyright = '2015, Daniel Mizyrycki'
+author = 'Daniel Mizyrycki'
+copyright = '2015, %s' % (author)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -32,14 +33,14 @@ pygments_style = 'sphinx'
 
 extensions = ['sphinx.ext.doctest']
 
-try:
-    import rst2pdf  # noqa
-    extensions += ['rst2pdf.pdfbuilder']
-except ImportError as e:
-    pass
+# --  Options for pdflatex output -----------------------------
+# Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+latex_documents = [
+    (master_doc, 'loadconfig.tex', 'Loadconfig Documentation',
+     author, 'manual')]
 
-pdf_documents = [('index', 'loadconfig', 'loadconfig docs',
-    'Daniel Mizyrycki')]
 
 # Use bootstrap theme if available. Assumed readthedocs otherwise
 if 'sphinx_bootstrap_theme' in locals():

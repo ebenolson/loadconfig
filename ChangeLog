@@ -4,6 +4,7 @@ CHANGES
 0.1.2 (unreleased)
 ------------------
 
+* Add python35 support
 * dev version update
 
 
