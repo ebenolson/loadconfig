@@ -21,6 +21,60 @@ import yaml
 from yaml.scanner import ScannerError
 
 
+class YamlLoader(yaml.SafeLoader):
+    '''Add loader methods to pyyaml'''
+    _data = ''
+
+    def __init__(self, *args, **kwargs):
+        super(YamlLoader, self).__init__(*args, **kwargs)
+        self.add_constructor(
+            yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+            self.construct_mapping)
+        self.add_constructor('!env', self.env)
+        self.add_constructor('!read', self.read)
+        self.add_constructor('!include', self.include)
+        self.add_constructor('!expand', self.expand)
+
+    def env(self, safeloader, node):
+        node = self.construct_scalar(node)
+        if node.upper() in environ:
+            return {node: environ[node.upper()]}
+        return {node: ''}
+
+    def read(self, safeloader, node):
+        node = self.construct_scalar(node)
+        return read_file(node)
+
+    def include(self, safeloader, node):
+        node = self.construct_scalar(node)
+        filepath, sep, key = node.partition(':')
+        self._data = yaml.load(read_file(filepath), YamlLoader)
+        return self.subkey(key)
+
+    def expand(self, safeloader, node):
+        key = self.construct_scalar(node)
+        self._data = safeloader._data
+        return self.subkey(key)
+
+    def subkey(self, key):
+        if not self._data:
+            return ''
+        data = deepcopy(self._data)
+        if key == '&':
+            return ''
+        for k in key.split(':'):
+            if not k:
+                return data
+            data = data.get(k)
+            if data is None:
+                return ''
+        return data
+
+    def construct_mapping(self, safeloader, node):
+        safeloader.flatten_mapping(node)
+        return Odict(safeloader.construct_pairs(node))
+
+
 class Odict(OrderedDict):
     r'''Add more readable representation to OrderedDict using yaml.
 
@@ -117,58 +171,7 @@ class Odict(OrderedDict):
     @staticmethod
     def load(yaml_string):
         '''Return pair list from a yaml string'''
-        class Loader(yaml.SafeLoader):
-            yaml_mapping = yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG
-            _data = ''
-
-            def __init__(self, *args, **kwargs):
-                super(Loader, self).__init__(*args, **kwargs)
-                self.add_constructor(self.yaml_mapping, self.construct_mapping)
-                self.add_constructor('!env', self.env)
-                self.add_constructor('!read', self.read)
-                self.add_constructor('!include', self.include)
-                self.add_constructor('!expand', self.expand)
-
-            def env(self, safeloader, node):
-                node = self.construct_scalar(node)
-                if node.upper() in environ:
-                    return {node: environ[node.upper()]}
-                return {node: ''}
-
-            def read(self, safeloader, node):
-                node = self.construct_scalar(node)
-                return read_file(node)
-
-            def include(self, safeloader, node):
-                node = self.construct_scalar(node)
-                filepath, sep, key = node.partition(':')
-                self._data = yaml.load(read_file(filepath), Loader)
-                return self.subkey(key)
-
-            def expand(self, safeloader, node):
-                key = self.construct_scalar(node)
-                self._data = safeloader._data
-                return self.subkey(key)
-
-            def subkey(self, key):
-                if not self._data:
-                    return ''
-                data = deepcopy(self._data)
-                if key == '&':
-                    return ''
-                for k in key.split(':'):
-                    if not k:
-                        return data
-                    data = data.get(k)
-                    if data is None:
-                        return ''
-                return data
-
-            def construct_mapping(self, safeloader, node):
-                safeloader.flatten_mapping(node)
-                return Odict(safeloader.construct_pairs(node))
-
-        return yaml.load(yaml_string, Loader)
+        return yaml.load(yaml_string, YamlLoader)
 
     @staticmethod
     def dump(self, default_flow_style=True):
