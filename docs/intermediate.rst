@@ -253,8 +253,7 @@ The following lines shows the same snippet for python. Lets play with clg:
     >>> try:
     ...     c = Config(conf, args=['sysbuild', '--help'])
     ... except SystemExit as e:
-    ...     pass
-    >>> print(e.code)
+    ...     print(e.code)
     usage: sysbuild [-h] host
     <BLANKLINE>
     Build a full system

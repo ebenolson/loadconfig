@@ -99,7 +99,7 @@ class Odict(OrderedDict):
         {activity: [hike, scuba dive], place: Hawaii}
         '''
         if name in ['_OrderedDict__root', '_OrderedDict__hardroot',
-         '_OrderedDict__map']:
+         '_OrderedDict__map']:  # pragma: no cover. Used for py27
             return super(Odict, self).__setattr__(name, value)
         self[name] = value
 
