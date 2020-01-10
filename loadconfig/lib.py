@@ -224,17 +224,17 @@ class Ret(text_type):
 
 
 class Run(Popen):
-    r'''Simplify Popen API. Add stop method, async parameter and code attrib.
-    stop method and blocking mode (async=False) call communicate.
+    r'''Simplify Popen API. Add stop method, nonblocking parameter and code attrib.
+    stop method and blocking mode (nonblocking=False) call communicate.
     After communicate, stdout and stderr are mutated to strings
 
     >>> from time import sleep
-    >>> with Run('echo hi; sleep 1000000', async=True) as proc:
+    >>> with Run('echo hi; sleep 1000000', nonblocking=True) as proc:
     ...     sleep(0.2)
     >>> 'hi\n' == proc.stdout
     True
     '''
-    def __init__(self, cmd, async=False, **kwargs):
+    def __init__(self, cmd, nonblocking=False, **kwargs):
         kw = dict(kwargs)
         kw.setdefault('universal_newlines', True)
         kw.setdefault('stdout', PIPE)
@@ -244,7 +244,7 @@ class Run(Popen):
         if not kw['shell'] and isinstance(cmd, (text_type, str)):
             cmd = shlex.split(cmd)
         super(Run, self).__init__(cmd, **kw)
-        if async is False:
+        if not nonblocking:
             self.get_output()
 
     def get_output(self):
@@ -283,7 +283,7 @@ class run(text_type):
     0
     '''
     def __new__(cls, cmd, **kwargs):
-        proc = Run(cmd, async=False, **kwargs)
+        proc = Run(cmd, nonblocking=False, **kwargs)
         ret = super(run, cls).__new__(cls, proc.stdout)
         ret.stdout = proc.stdout
         ret.stderr = proc.stderr

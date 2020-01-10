@@ -25,13 +25,13 @@ def test_Run_context():
     assert not isfile(tmp + '/test.txt')
 
 
-def test_Run_context_async():
-    with Run('echo hi', async=True) as proc:
+def test_Run_context_nonblocking():
+    with Run('echo hi', nonblocking=True) as proc:
         assert 'hi\n' == proc.get_output()
 
 
 def test_Run_stop():
-    ret = Run('echo hi; sleep 1000000', async=True)
+    ret = Run('echo hi; sleep 1000000', nonblocking=True)
     sleep(0.2)
     ret.stop()
     assert 'hi\n' == ret.stdout
